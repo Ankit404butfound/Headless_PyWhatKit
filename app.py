@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect
 import threading
 import os
+import time
 from selenium import webdriver
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
@@ -49,6 +50,7 @@ def sendmsg():
   driver.get(f"https://web.whatsapp.com/send?phone={number}&text=Hello")
   threading.Thread(target=lambda:send(driver)).start()
   print(os.listdir())
+  time.sleep(2)
   driver.save_screenshot('static/screens.png')
   print(os.listdir())
   return redirect("https://headless-pywhatkit.herokuapp.com/screens.png",302)
