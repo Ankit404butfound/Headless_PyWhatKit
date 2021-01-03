@@ -15,7 +15,7 @@ except:
 
 options = FirefoxOptions()
 #fp = webdriver.FirefoxProfile('/root/.mozilla/firefox/abcdefgh.default')
-driver = webdriver.Firefox(profile)
+#driver = webdriver.Firefox(profile)
 options.add_argument('--no-sandbox')
 options.add_argument("--headless")
         
