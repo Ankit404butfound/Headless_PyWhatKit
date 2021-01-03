@@ -31,6 +31,7 @@ def send(driver):
     try:
       but = driver.find_element_by_xpath('//button[@class="_2Ujuu"]')
       but.click()
+      driver.quit()
       break;
     except:
       pass
