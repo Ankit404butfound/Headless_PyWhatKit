@@ -4,7 +4,11 @@ import os
 from selenium import webdriver
 
 
-app = Flask('app')
+app = Flask('app',static_url_path='')
+try:
+    os.mkdir("static")
+except:
+    pass
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -39,9 +43,9 @@ def sendmsg():
   driver.get(f"https://web.whatsapp.com/send?phone={number}&text=Hello")
   threading.Thread(target=lambda:send(driver)).start()
   print(os.listdir())
-  driver.save_screenshot('screenie.png')
+  driver.save_screenshot('static/screenie.png')
   print(os.listdir())
-  return redirect("/screenie.png",302)
+  return redirect("https://headless-pywhatkit.herokuapp.com/screenie.png",302)
   
 
 
