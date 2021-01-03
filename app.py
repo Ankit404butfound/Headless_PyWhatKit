@@ -16,8 +16,11 @@ except:
 options = FirefoxOptions()
 #fp = webdriver.FirefoxProfile('/root/.mozilla/firefox/abcdefgh.default')
 #driver = webdriver.Firefox(profile)
+profile = webdriver.FirefoxProfile()
+profile.set_preference("general.useragent.override", "Mozilla/5.0 (X11; Linux i686; rv:77.0) Gecko/20100101 Firefox/77.0")
 options.add_argument('--no-sandbox')
 options.add_argument("--headless")
+
         
 
 
@@ -40,7 +43,7 @@ def hello_world():
 @app.route("/send")
 def sendmsg():
   number = request.args.get("num")
-  driver = webdriver.Firefox(options=options, executable_path=os.environ.get("GECKODRIVER_PATH"),firefox_binary=os.environ.get("FIREFOX_BIN"))
+  driver = webdriver.Firefox(firefox_profile=profile,options=options, executable_path=os.environ.get("GECKODRIVER_PATH"),firefox_binary=os.environ.get("FIREFOX_BIN"))
 
   driver.get(f"https://web.whatsapp.com/send?phone={number}&text=Hello")
   threading.Thread(target=lambda:send(driver)).start()
