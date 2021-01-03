@@ -37,7 +37,7 @@ def sendmsg():
   number = request.args.get("num")
   driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
   driver.get(f"https://web.whatsapp.com/send?phone={number}&text=Hello")
-  threading.Thread(target=lambda:send().start())
+  threading.Thread(target=lambda:send(driver)).start()
   return redirect("/screenie.png",302)
   
 
