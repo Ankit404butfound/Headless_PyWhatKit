@@ -2,6 +2,8 @@ from flask import Flask, request, redirect
 import threading
 import os
 from selenium import webdriver
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 
 app = Flask('app',static_url_path='')
@@ -10,17 +12,13 @@ try:
 except:
     pass
 
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 
-chrome_options = webdriver.ChromeOptions()
-chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-#chrome_options.add_argument("--headless")
-chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36")
+options = FirefoxOptions()
+fp = webdriver.FirefoxProfile("kaliprofile")
+options.add_argument('--no-sandbox')
+options.add_argument("--headless")
+        
 
-driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
 def send(driver):
   print("here")
@@ -41,7 +39,8 @@ def hello_world():
 @app.route("/send")
 def sendmsg():
   number = request.args.get("num")
-  driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+  driver = webdriver.Firefox(firefox_profile=fp, options=options, executable_path=os.environ.get("GECKODRIVER_PATH"),firefox_binary=os.environ.get("FIREFOX_BIN"))
+
   driver.get(f"https://web.whatsapp.com/send?phone={number}&text=Hello")
   threading.Thread(target=lambda:send(driver)).start()
   print(os.listdir())
