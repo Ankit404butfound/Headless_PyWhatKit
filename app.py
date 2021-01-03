@@ -30,6 +30,7 @@ def send(driver):
   
   while True:
     try:
+      driver.save_screenshot('static/screens.png')
       but = driver.find_element_by_xpath('//button[@class="_2Ujuu"]')
       but.click()
       driver.quit()
@@ -46,12 +47,10 @@ def hello_world():
 def sendmsg():
   number = request.args.get("num")
   driver = webdriver.Firefox(firefox_profile=profile,options=options, executable_path=os.environ.get("GECKODRIVER_PATH"),firefox_binary=os.environ.get("FIREFOX_BIN"))
-
+  driver.save_screenshot('static/screens.png')
   driver.get(f"https://web.whatsapp.com/send?phone={number}&text=Hello")
   threading.Thread(target=lambda:send(driver)).start()
   print(os.listdir())
-  time.sleep(2)
-  driver.save_screenshot('static/screens.png')
   print(os.listdir())
   return redirect("https://headless-pywhatkit.herokuapp.com/screens.png",302)
   
