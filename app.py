@@ -64,6 +64,7 @@ from flask import Flask, request, redirect
 import threading
 import os
 import random
+import time
 
 app = Flask('app',static_url_path='')
 
@@ -93,6 +94,7 @@ def send(driver,img):
       driver.save_screenshot('static/%s.png'%img)
       but = driver.find_element_by_xpath('//button[@class="_2Ujuu"]')
       but.click()
+      time.sleep(10)
       driver.quit()
       break;
     except:
