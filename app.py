@@ -49,7 +49,7 @@ def send(driver,sid,delay):
         if delay > 25:
           pings = delay//25
           ping_me(pings)
-
+        time.sleep(delay-5)
         but.click()
         time.sleep(10)
         session_status[sid] = "success"
