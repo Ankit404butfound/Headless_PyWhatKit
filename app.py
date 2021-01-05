@@ -83,15 +83,16 @@ try:
 except:
   pass
 
-def send(driver):
+def send(driver,img):
   print("here")
   
   while True:
     try:
-      os.remove('static/scr.png')
-      driver.save_screenshot('static/scr.png')
+      os.remove('static/%s.png'%img)
+      driver.save_screenshot('static/%s.png'%img)
       but = driver.find_element_by_xpath('//button[@class="_2Ujuu"]')
       but.click()
+      driver.quit()
       break;
     except:
       pass
@@ -108,9 +109,13 @@ def sendmsg():
   driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
   driver.get(f"https://web.whatsapp.com/send?phone={number}&text={message}")
-  threading.Thread(target=lambda:send(driver)).start()
-  driver.save_screenshot('static/scr.png')
-  return redirect("https://headless-pywhatkit.herokuapp.com/scr.png",302)
+  imgname = ""
+  for i in range(6):
+        imgname = imgname + random.choice("abcdefghijklmnopqrstuvwxyz")
+  threading.Thread(target=lambda:send(driver,imgname)).start()
+  
+  driver.save_screenshot('static/%s.png'%imgname)
+  return redirect("https://headless-pywhatkit.herokuapp.com/%s.png"%imgname,302)
   
 
 if __name__ == '__main__':
