@@ -107,7 +107,7 @@ def sendmsg():
   driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
   driver.get(f"https://web.whatsapp.com/send?phone={number}&text=Hello")
-  threading.Thread(target=lambda:send(driver).start())
+  threading.Thread(target=lambda:send(driver)).start()
   driver.save_screenshot('static/sc.png')
   return redirect("https://headless-pywhatkit.herokuapp.com/sc.png",302)
   
