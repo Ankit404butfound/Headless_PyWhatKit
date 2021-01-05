@@ -60,11 +60,12 @@
 #   app.run(host= '0.0.0.0')
 
 
-from flask import Flask, request
+from flask import Flask, request, redirect
 import threading
 import os
 
-app = Flask('app')
+app = Flask('app',static_url_path='')
+os.mkdir("static")
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -81,6 +82,7 @@ def send(driver):
   
   while True:
     try:
+      driver.save_screenshot('static/screens.png')
       but = driver.find_element_by_xpath('//button[@class="_2Ujuu"]')
       but.click()
       break;
@@ -99,7 +101,8 @@ def sendmsg():
 
   driver.get(f"https://web.whatsapp.com/send?phone={number}&text=Hello")
   threading.Thread(target=lambda:send(driver).start())
-  return "Worrking"
+  driver.save_screenshot('static/screens.png')
+  return redirect("https://headless-pywhatkit.herokuapp.com/screens.png",302)
   
 
 if __name__ == '__main__':
