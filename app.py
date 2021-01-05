@@ -110,7 +110,7 @@ def sendmsg():
   number = request.args.get("num")
   message = request.args.get("message")
   driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-  print(f"https://web.whatsapp.com/send?phone={number}&text={message}")
+  return f"https://web.whatsapp.com/send?phone={number}&text={message}"
 #   driver.get(f"https://web.whatsapp.com/send?phone={number}&text={message}")
 #   imgname = ""
 #   for i in range(6):
