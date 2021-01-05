@@ -1,77 +1,15 @@
-# from flask import Flask, request, redirect
-# import threading
-# import os
-# import time
-# from selenium import webdriver
-# from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
-# from selenium.webdriver.firefox.options import Options as FirefoxOptions
-
-
-# app = Flask('app',static_url_path='')
-# try:
-#     os.mkdir("static")
-# except:
-#     pass
-
-
-# options = FirefoxOptions()
-# #fp = webdriver.FirefoxProfile('/root/.mozilla/firefox/abcdefgh.default')
-# #driver = webdriver.Firefox(profile)
-# profile = webdriver.FirefoxProfile()
-# profile.set_preference("general.useragent.override", "Mozilla/5.0 (X11; Linux i686; rv:77.0) Gecko/20100101 Firefox/77.0")
-# options.add_argument('--no-sandbox')
-# options.add_argument("--headless")
-
-        
-
-
-# def send(driver):
-#   print("here")
-  
-#   while True:
-#     try:
-#       driver.save_screenshot('static/screens.png')
-#       but = driver.find_element_by_xpath('//button[@class="_2Ujuu"]')
-#       but.click()
-#       driver.quit()
-#       break;
-#     except:
-#       pass
-    
-
-# @app.route('/')
-# def hello_world():
-#   return 'Hello, World!'
-
-# @app.route("/send")
-# def sendmsg():
-#   number = request.args.get("num")
-#   driver = webdriver.Firefox(firefox_profile=profile,options=options, executable_path=os.environ.get("GECKODRIVER_PATH"),firefox_binary=os.environ.get("FIREFOX_BIN"))
-#   driver.save_screenshot('static/screens.png')
-#   driver.get(f"https://web.whatsapp.com/send?phone={number}&text=Hello")
-#   threading.Thread(target=lambda:send(driver)).start()
-#   print(os.listdir())
-#   print(os.listdir())
-#   return redirect("https://headless-pywhatkit.herokuapp.com/screens.png",302)
-  
-
-
-# if __name__ == '__main__':
-#   app.run(host= '0.0.0.0')
-
-
-from flask import Flask, request, redirect
+from flask import Flask, request
 import threading
 import os
 import random
 import time
-
-app = Flask('app',static_url_path='')
-
-
-
+import string
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+import requests
+
+lower_case = string.ascii_lowercase
+app = Flask('app',static_url_path='')
 
 chrome_options = Options()
 chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
@@ -80,23 +18,43 @@ chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
 chrome_options.add_argument("user-agent=Mozilla/5.0 (X11; Linux i686; rv:77.0) Gecko/20100101 Firefox/77.0")
 
+send_but = '//button[@class="_2Ujuu"]'
+qr_code = "To use WhatsApp on your computer:"
+session_status = {}
+
+
 try:
   os.mkdir("static")
 except:
   pass
 
-def send(driver,img):
+
+def ping_me(ping_freq):
+  for i in range(ping_freq):
+    requests.get("https://headless-pywhatkit.herokuapp.com")
+    time.sleep(1500)
+
+
+def send(driver,sid,delay):
   print("here")
-  
-  while True:
+  delay = int(delay)
+  for i in range(404):
     try:
-      os.remove('static/%s.png'%img)
-      driver.save_screenshot('static/%s.png'%img)
-      but = driver.find_element_by_xpath('//button[@class="_2Ujuu"]')
-      but.click()
-      time.sleep(10)
-      driver.quit()
-      break;
+      if qr_code in driver.page_source:
+        driver.save_screenshot('static/%s.png'%sid)
+        session_status[sid] = "scan_qr"
+      else:
+        session_status[sid] = "working"
+        but = driver.find_element_by_xpath(send_but)
+        if delay > 25:
+          pings = delay//25
+          ping_me(pings)
+
+        but.click()
+        time.sleep(10)
+        session_status[sid] = "success"
+        driver.quit()
+        break;
     except:
       pass
  
@@ -105,21 +63,35 @@ def send(driver,img):
 def hello_world():
   return 'Hello, World!'
 
+
 @app.route("/send")
 def sendmsg():
   number = request.args.get("num")
   message = request.args.get("message")
+  delay = request.args.get("delay")
   driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+
   print(f"https://web.whatsapp.com/send?phone={number}&text={message}")
   driver.get(f"https://web.whatsapp.com/send?phone={number}&text={message}")
-  imgname = ""
+
+  session_id = ""
   for i in range(6):
-        imgname = imgname + random.choice("abcdefghijklmnopqrstuvwxyz")
-  print(imgname)
-  driver.save_screenshot('static/%s.png'%imgname)
-  threading.Thread(target=lambda:send(driver,imgname)).start()
-  return redirect("https://headless-pywhatkit.herokuapp.com/%s.png"%imgname,302)
-  
+        session_id = session_id + random.choice(lower_case)
+
+  print(session_id)
+  driver.save_screenshot('static/%s.png'%session_id)
+  threading.Thread(target=lambda:send(driver,session_id,delay)).start()
+  return "https://headless-pywhatkit.herokuapp.com/%s.png"%session_id
+
+
+@app.route("/session-status")
+def stats():
+  sess_id = request.args.get("id")
+  try:
+    return  session_status[sess_id]
+  except:
+    return "Invalid Session Id"
+
 
 if __name__ == '__main__':
   app.run(host= '0.0.0.0')
