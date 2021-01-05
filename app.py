@@ -88,6 +88,7 @@ def send(driver):
   
   while True:
     try:
+      os.remove('static/scree.png')
       driver.save_screenshot('static/scree.png')
       but = driver.find_element_by_xpath('//button[@class="_2Ujuu"]')
       but.click()
