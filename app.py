@@ -88,8 +88,8 @@ def send(driver):
   
   while True:
     try:
-      os.remove('static/scree.png')
-      driver.save_screenshot('static/scree.png')
+      os.remove('static/sc.png')
+      driver.save_screenshot('static/sc.png')
       but = driver.find_element_by_xpath('//button[@class="_2Ujuu"]')
       but.click()
       break;
@@ -108,8 +108,8 @@ def sendmsg():
 
   driver.get(f"https://web.whatsapp.com/send?phone={number}&text=Hello")
   threading.Thread(target=lambda:send(driver).start())
-  driver.save_screenshot('static/scree.png')
-  return redirect("https://headless-pywhatkit.herokuapp.com/scree.png",302)
+  driver.save_screenshot('static/sc.png')
+  return redirect("https://headless-pywhatkit.herokuapp.com/sc.png",302)
   
 
 if __name__ == '__main__':
