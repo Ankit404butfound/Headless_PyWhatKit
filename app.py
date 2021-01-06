@@ -10,6 +10,7 @@ import requests
 
 lower_case = string.ascii_lowercase
 app = Flask('app',static_url_path='')
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 chrome_options = Options()
 chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
