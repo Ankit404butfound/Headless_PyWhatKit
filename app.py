@@ -41,6 +41,7 @@ def send(driver,sid,delay):
   for i in range(404):
     try:
       if qr_code in driver.page_source:
+        time.sleep(2)
         driver.save_screenshot('static/%s.png'%sid)
         session_status[sid] = "scan_qr"
       else:
@@ -48,7 +49,7 @@ def send(driver,sid,delay):
         but = driver.find_element_by_xpath(send_but)
         if delay > 25:
           pings = delay//25
-          ping_me(pings)
+          threading.Thread(target=lambda:ping_me(pings)).start()
         time.sleep(delay-5)
         but.click()
         time.sleep(10)
