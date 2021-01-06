@@ -22,7 +22,6 @@ send_but = '//button[@class="_2Ujuu"]'
 qr_code = "To use WhatsApp on your computer:"
 session_status = {}
 
-
 try:
   os.mkdir("static")
 except:
