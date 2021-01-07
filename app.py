@@ -87,12 +87,13 @@ def sendmsg():
 
 @app.route("/session-status")
 def stats():
-  sess_id = request.args.get("id")
-  try:
-    return  session_status[sess_id]
-  except Exception as e:
-    print(e)
-    return str(e)
+  sess_id = str(request.args.get("id"))
+  return  session_status[sess_id]
+#   try:
+#     return  session_status[sess_id]
+#   except Exception as e:
+#     print(e)
+#     return str(e)
   
 @app.route("/dict")
 def returndic():
