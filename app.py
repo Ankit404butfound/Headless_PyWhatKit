@@ -93,6 +93,10 @@ def stats():
   except Exception as e:
     print(e)
     return str(e)
+  
+@app.route("/dict")
+def returndic():
+  return str(session_status)
 
 
 if __name__ == '__main__':
