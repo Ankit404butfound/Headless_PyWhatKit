@@ -91,6 +91,7 @@ def stats():
   val = "Invalid_id"
   try:
     val = session_status[sess_id]
+    return val
   except Exception as e:
     print(e)
     return val
