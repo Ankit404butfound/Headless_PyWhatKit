@@ -92,7 +92,7 @@ def stats():
     return  session_status[sess_id]
   except Exception as e:
     print(e)
-    return "Invalid Session Id"
+    return str(e)
 
 
 if __name__ == '__main__':
