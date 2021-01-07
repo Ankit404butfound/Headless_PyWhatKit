@@ -47,8 +47,8 @@ def send(driver,sid,delay):
       else:
         session_status[sid] = "working"
         but = driver.find_element_by_xpath(send_but)
-        if delay > 25:
-          pings = delay//25
+        if delay > 1500:
+          pings = delay//1500
           threading.Thread(target=lambda:ping_me(pings)).start()
         time.sleep(delay-5)
         but.click()
