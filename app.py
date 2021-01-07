@@ -88,7 +88,12 @@ def sendmsg():
 @app.route("/session-status")
 def stats():
   sess_id = str(request.args.get("id"))
-  return  session_status[sess_id]
+  val = "Invalid_id"
+  try:
+    val = session_status[sess_id]
+  except Exception as e:
+    print(e)
+    return val
 #   try:
 #     return  session_status[sess_id]
 #   except Exception as e:
