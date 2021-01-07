@@ -28,6 +28,16 @@ try:
 except:
   pass
 
+def handle(method,data=None):
+  if method == "r":
+    return open("info.txt").read()
+  else:
+    file = open("info.txt","w")
+    file.write(data)
+    file.close()
+    
+    
+handle("w","{}")
 
 def ping_me(ping_freq):
   for i in range(ping_freq):
@@ -43,9 +53,16 @@ def send(driver,sid,delay):
       if qr_code in driver.page_source:
         time.sleep(2)
         driver.save_screenshot('static/%s.png'%sid)
-        session_status[sid] = "scan_qr"
+        data = eval(handle("r"))
+        data[sid]="scan_qr"
+        handle("w",str(data))
+#         session_status[sid] = "scan_qr"
+        
       else:
-        session_status[sid] = "working"
+#         session_status[sid] = "working"
+        data = eval(handle("r"))
+        data[sid]="working"
+        handle("w",str(data))
         but = driver.find_element_by_xpath(send_but)
         if delay > 1500:
           pings = delay//1500
@@ -53,7 +70,10 @@ def send(driver,sid,delay):
         time.sleep(delay-5)
         but.click()
         time.sleep(10)
-        session_status[sid] = "success"
+        data = eval(handle("r"))
+        data[sid]="success"
+        handle("w",str(data))
+#         session_status[sid] = "success"
         driver.quit()
         break;
     except:
@@ -87,8 +107,8 @@ def sendmsg():
 
 @app.route("/session-status")
 def stats():
-  sess_id = str(request.args.get("id"))
-  return session_status[sess_id]
+  #sess_id = str(request.args.get("id"))
+  return handle("r")
   
 #   try:
 #     return  session_status[sess_id]
@@ -96,9 +116,9 @@ def stats():
 #     print(e)
 #     return str(e)
   
-@app.route("/dict")
-def returndic():
-  return str(session_status)
+# @app.route("/dict")
+# def returndic():
+#   return str(session_status)
 
 
 if __name__ == '__main__':
