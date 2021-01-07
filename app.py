@@ -90,7 +90,8 @@ def stats():
   sess_id = request.args.get("id")
   try:
     return  session_status[sess_id]
-  except:
+  except Exception as e:
+    print(e)
     return "Invalid Session Id"
 
 
