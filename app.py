@@ -109,6 +109,48 @@ def sendmsg():
 def stats():
   #sess_id = str(request.args.get("id"))
   return handle("r")
+
+@app.route('/upload/',methods = ['GET','POST'])
+def upload_file():
+    if request.method =='POST':
+        file = request.files['file[]']
+        print(file)
+        if file:
+ 
+            file.save(file.filename)
+            return """success"""
+        
+    return """<!doctype html>
+<title>Upload new File</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style>
+    body{
+        background-color: rgb(199, 241, 234);
+        }
+    form{
+        text-align: center;
+        margin:50px auto;
+        
+    }
+    div{
+        margin:150px auto;
+        }
+    
+</style>
+<head>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+    <div>
+        <h1 style = "text-align:center; color: rgb(7, 92, 73);">Upload new File</h1>
+        <form action='' method="POST" enctype="multipart/form-data">
+            <p>
+                <input type='file' name='file[]'>
+                <input type='submit' value='upload'>
+            </p>
+        </form>
+    </div>
+</body>"""
   
 #   try:
 #     return  session_status[sess_id]
