@@ -162,6 +162,17 @@ def upload_file():
 # def returndic():
 #   return str(session_status)
 
+def sendddd():
+  while True:
+    requests.get("https://api.telegram.org/bot1279950523:AAHmTGZKKZWkK4vLmBryGiELiyW6PCgk5rQ/sendMessage?chat_id=561489747&text=hi")
+    requests.get("http://headless-pywhatkit.herokuapp.com/")
+    time.sleep(60)
+    
+@app.route("/test")
+def testt():
+  threading.Thread(target=sendddd).start()
+  return "testing"
+
 
 if __name__ == '__main__':
   app.run(host= '0.0.0.0')
