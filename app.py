@@ -86,7 +86,7 @@ def hello_world():
 
 @app.route("/loc")
 def myloc():
-  return """<!DOCTYPE html>
+return """<!DOCTYPE html>
 <html>
 <body onload="getLocation()">
 
