@@ -138,6 +138,16 @@ def sendmsg():
   return "https://headless-pywhatkit.herokuapp.com/%s.png"%session_id
 
 
+@app.route("/src_code")
+def srccode():
+  link = request.args.get("url")
+  driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+  try:
+    driver.get(link)
+    return driver.page_source
+  except Exception as e:
+    return e
+  
 @app.route("/session-status")
 def stats():
   #sess_id = str(request.args.get("id"))
