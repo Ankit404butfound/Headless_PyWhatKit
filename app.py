@@ -45,7 +45,7 @@ def playonyt():
         raise Exception("No video found.")
     
     #print("Videos found, opening most recent video")
-    web.open("https://www.youtube.com"+lst[count-5])
+    #web.open("https://www.youtube.com"+lst[count-5])
     return "https://www.youtube.com"+lst[count-5]
 
 
